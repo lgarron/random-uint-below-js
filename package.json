@@ -15,10 +15,6 @@
     ".": {
       "import": "./dist/esm/index.js",
       "types": "./dist/types/index.d.ts"
-    },
-    "./global": {
-      "import": "./dist/esm-global/index.js",
-      "types": "./dist/types/global.d.ts"
     }
   },
   "scripts": {

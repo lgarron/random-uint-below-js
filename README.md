@@ -26,9 +26,19 @@ console.log(randomChoice(["vanilla", "strawberry", "peppermint"]))
 - All major browsers since 2014: <https://caniuse.com/getrandomvalues>
 - `bun` and `deno`
 - `node` without a flag since `v19`: <https://nodejs.org/api/webcrypto.html#cryptogetrandomvaluestypedarray>
-  - Available in earlier versions with the `--experimental-global-webcrypto` flag.
 
 Builds are only published in ESM (with ES2020 compatibility).
+
+## Global
+
+We no longer publish a build that modifies the global variable. You can create such a build yourself using:
+
+```sh
+# bash
+cd "$(mktemp -d)" && npm init -y && npm install esbuild random-uint-below
+echo 'import { randomUIntBelow } from "random-uint-below"; globalThis.randomUIntBelow = randomUIntBelow' | \
+  npx esbuild --target=es6 --bundle --minify --outfile=randomUintBelow.global.js
+```
 
 ## License
 
