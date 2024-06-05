@@ -27,12 +27,15 @@
     "build-js": "node script/build.js",
     "dev": "node script/dev.js",
     "clean": "rm -rf ./dist",
-    "prepack": "npm run clean && npm run build"
+    "prepack": "npm run clean && npm run build",
+    "lint": "npx @biomejs/biome check ./src",
+    "format": "npx @biomejs/biome format --write ./src"
   },
   "engines": {
     "node": ">=19"
   },
   "devDependencies": {
+    "@biomejs/biome": "^1.8.0",
     "barely-a-dev-server": "^0.3.6",
     "typescript": "^4.9.3"
   },
