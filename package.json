@@ -24,9 +24,11 @@
   "scripts": {
     "build": "npm run build-types && npm run build-js",
     "build-types": "npx tsc",
-    "build-js": "node script/build.js",
-    "dev": "node script/dev.js",
+    "build-js": "bun run script/build.ts",
+    "dev": "bun run script/dev.ts",
+    "setup": "bun install",
     "clean": "rm -rf ./dist",
+    "reset": "npm run clean && rm -rf ./node_modules",
     "prepack": "npm run clean && npm run build",
     "lint": "npx @biomejs/biome check ./src",
     "format": "npx @biomejs/biome format --write ./src"
