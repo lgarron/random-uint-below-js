@@ -1,21 +1,23 @@
 /*
  * randomUIntBelow(max) returns a random non-negative integer less than max (0 <= output < max).
- * `max` must be at most 2^53.
+ * `max` must be an integer from 1 to 2^53 (inclusive).
  */
 const MAX_JS_PRECISE_INT = 2 ** 53;
 
-const UPPER_HALF_MULTIPLIER = 2097152; // 2^21. We have to use multiplication because bit shifts truncate to 32 bits.
-const LOWER_HALF_DIVIDER = 2048;
+const UPPER_HALF_MULTIPLIER = 2097152; // 2^21.
+const LOWER_HALF_RIGHT_SHIFT_BITS = 11;
 
+const arr = new Uint32Array(2);
 function random53BitNumber(): number {
   // Construct a random 53-bit value from a 32-bit upper half and a 21-bit lower half.
-  const arr = new Uint32Array(2);
+  // Note that in theory it *could* be faster to construct only a 32-bit number when needed, but the impact on performance is negligible.
   globalThis.crypto.getRandomValues(arr);
   const upper = arr[0];
   const lower = arr[1];
   return (
+    // We have to use multiplication and `Math.floor(…)` for `upper` because bit shifts and `var | 0` truncate the value to 32 bits.
     Math.floor(upper * UPPER_HALF_MULTIPLIER) +
-    Math.floor(lower / LOWER_HALF_DIVIDER)
+    (lower >> LOWER_HALF_RIGHT_SHIFT_BITS)
   );
 }
 
@@ -36,15 +38,19 @@ function validateMax(max: number): void {
 export function randomUIntBelow(max: number): number {
   validateMax(max);
 
-  let val = random53BitNumber();
-  const maxUniformSamplingRange = Math.floor(MAX_JS_PRECISE_INT / max) * max;
+  // biome-ignore lint/style/noVar: Using `var` saves perf.
+  var val: number;
+  // biome-ignore lint/style/noVar: Using `var` saves perf.
+  var block: number;
+  // biome-ignore lint/style/noVar: Using `var` saves perf.
+  var blockMax: number;
 
-  // Rejection sampling:
-  while (val >= maxUniformSamplingRange) {
-    // val % max would produce a biased result. This bias can be very bad if `max` is on the order of MAX_JS_PRECISE_INT. We have to try again, so just call ourselves recursively.
-    // For some values of `max` just above 9007199254740992 / 2, this happens about once on average. For other values of `max`, it's less than that (and for small values of `max` it's extremely unlikely).
-    // TODO: Use more bits of accuracy instead of rejection sampling to avoid DoS.
+  while (true) {
     val = random53BitNumber();
+    block = Math.floor(val / max);
+    blockMax = block * max;
+    if (blockMax < MAX_JS_PRECISE_INT - block) {
+      return val - blockMax;
+    }
   }
-  return val % max;
 }
