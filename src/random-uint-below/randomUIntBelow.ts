@@ -2,8 +2,7 @@
  * randomUIntBelow(max) returns a random non-negative integer less than max (0 <= output < max).
  * `max` must be at most 2^53.
  */
-
-const MAX_JS_PRECISE_INT = 9007199254740992;
+const MAX_JS_PRECISE_INT = 2 ** 53;
 
 const UPPER_HALF_MULTIPLIER = 2097152; // 2^21. We have to use multiplication because bit shifts truncate to 32 bits.
 const LOWER_HALF_DIVIDER = 2048;
