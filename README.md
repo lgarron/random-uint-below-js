@@ -11,7 +11,7 @@ import {randomUIntBelow} from "random-uint-below"
 console.log(randomUIntBelow(6)); // Generates a uniform random value from [0, 1, 2, 3, 4, 5]
 ```
 
-Since one of the most comon use cases for this is to select a random element from an array, we also provide a convenience:
+Since one of the most common use cases for this is to select a random element from an array, we also provide a convenience:
 
 ```ts
 import {randomChoice} from "random-uint-below"
