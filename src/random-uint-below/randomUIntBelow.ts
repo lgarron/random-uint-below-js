@@ -45,7 +45,7 @@ export function randomUIntBelow(max: number): number {
     // val % max would produce a biased result. This bias can be very bad if `max` is on the order of MAX_JS_PRECISE_INT. We have to try again, so just call ourselves recursively.
     // For some values of `max` just above 9007199254740992 / 2, this happens about once on average. For other values of `max`, it's less than that (and for small values of `max` it's extremely unlikely).
     // TODO: Use more bits of accuracy instead of rejection sampling to avoid DoS.
-    return (val = random53BitNumber());
+    val = random53BitNumber();
   }
   return val % max;
 }
