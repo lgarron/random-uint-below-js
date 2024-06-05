@@ -42,4 +42,4 @@ echo 'import { randomUIntBelow } from "random-uint-below"; globalThis.randomUInt
 
 ## License
 
-MIT or GPL.
+This work is dedicated to the public domain using the [Unlicense](https://unlicense.org/).
