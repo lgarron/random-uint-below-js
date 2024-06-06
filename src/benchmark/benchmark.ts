@@ -1,9 +1,21 @@
+const originalGetRandomValues = globalThis.crypto.getRandomValues.bind(
+  globalThis.crypto,
+);
+
+let counter = 0;
+
+globalThis.crypto.getRandomValues = (array) => {
+  counter++;
+  return originalGetRandomValues(array);
+};
+
 import { randomUIntBelow } from "../random-uint-below";
 
 const DEFAULT_NUM_RUNS = 1_000_000;
 const DEFAULT_MAX = 1337;
 
 export function benchmark(options?: { numRuns?: number; max?: number }) {
+  counter = 0;
   const start = performance.now();
   let total = 0;
   const numRuns = options?.numRuns ?? DEFAULT_NUM_RUNS;
@@ -14,7 +26,7 @@ export function benchmark(options?: { numRuns?: number; max?: number }) {
     total += randomUIntBelow(max);
   }
   console.log(
-    `Finished ${numRuns} runs for max ${max} in: ${Math.floor((performance.now() - start) * 1000) / 1000}ms`,
+    `Finished ${numRuns} runs for max ${max} in: ${Math.floor((performance.now() - start) * 1000) / 1000}ms (${counter} calls)`,
   );
   console.log(
     `Mean of generated values (should be ≈${(max - 1) / 2}): ${total / numRuns}`,
