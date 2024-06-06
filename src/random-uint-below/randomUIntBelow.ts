@@ -49,7 +49,7 @@ export function randomUIntBelow(max: number): number {
     val = random53BitNumber();
     block = Math.floor(val / max);
     blockMax = block * max;
-    if (blockMax < MAX_JS_PRECISE_INT - block) {
+    if (blockMax <= MAX_JS_PRECISE_INT - max) {
       return val - blockMax;
     }
   }
