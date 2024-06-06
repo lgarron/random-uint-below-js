@@ -2,7 +2,7 @@
 
 ## Usage
 
-`randomUIntBelow(max)` returns a random non-negative integer less than max `(0 <= output < max)`. `max` must be at most `2^53`.
+`randomUIntBelow(max)` returns a uniform random non-negative integer less than max `(0 <= output < max)`. `max` must be at most `2^53`.
 
 ```ts
 import {randomUIntBelow} from "random-uint-below"
